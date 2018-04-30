@@ -23,7 +23,12 @@ app.use(bodyParser.json())
 //============================================================== 
 var appRoutes = require('./routes/app');
 var usuarioRoutes = require('./routes/usuario');
-var loginRoutes = require('./routes/login')
+var loginRoutes = require('./routes/login');
+var hospitalRoutes = require('./routes/hospital');
+var medicoRoutes = require('./routes/medico');
+var busquedaRouter = require('./routes/busqueda');
+var uploadRouter = require('./routes/upload');
+var imagenRouter = require('./routes/imagenes');
 
 
 // coneccion a la base de datos
@@ -43,9 +48,16 @@ mongoose.connection.openUri('mongodb://localhost:27017/hospitaldb',(err, resp)=>
 // });
 
 // Middleward
+app.use('/upload',uploadRouter);
+app.use('/busqueda',busquedaRouter);
+app.use('/medico',medicoRoutes);
+app.use('/hospital',hospitalRoutes);
 app.use('/usuario',usuarioRoutes);
 app.use('/login',loginRoutes);
+app.use('/imagen',imagenRouter);
+
 app.use('/',appRoutes);
+
 
 
 //Escuchar peticiones

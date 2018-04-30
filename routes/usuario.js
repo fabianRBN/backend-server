@@ -17,7 +17,12 @@ var verificarToken = require('../middlewares/autenticacion');
 //========================================
 app.get('/', (req, res, next) => {
 
+    var desde = req.query.desde || 0;
+    desde = Number(desde);
+
     Usuario.find({},'_id nombre email pasword img role')
+        .skip(desde)
+        .limit(5)
         .exec(
             (err,usuarios)=>{
             if(err){
@@ -28,10 +33,16 @@ app.get('/', (req, res, next) => {
                 });
             }
 
-        res.status(200).json({
-            ok:true,
-            usuario: usuarios
+        Usuario.count({},(error,count)=>{
+
+            res.status(200).json({
+                ok:true,
+                usuario: usuarios,
+                contador: count
+
+            });
         });
+        
     });
 
     
@@ -136,6 +147,7 @@ app.delete('/:id',(req,res)=>{
         if(usuarioBorrado){
             return res.status(200).json({
                 ok: true,
+                mensaje:'Hospital eliminado',
                 usuario: usuarioBorrado
             });
         }
